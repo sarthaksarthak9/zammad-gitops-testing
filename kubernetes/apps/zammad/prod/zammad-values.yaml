@@ -1,0 +1,94 @@
+zammadConfig:
+  postgresql:
+    enabled: false
+    host: zammad-pg-rw
+    port: 5432
+    db: zammad_production
+    user: zammad
+
+  railsserver:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 384Mi
+      limits:
+        cpu: 300m
+        memory: 768Mi
+
+  scheduler:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 192Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+
+  websocket:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 160Mi
+      limits:
+        cpu: 500m
+        memory: 384Mi
+
+  nginx:
+    resources:
+      requests:
+        cpu: 20m
+        memory: 32Mi
+      limits:
+        cpu: 50m
+        memory: 64Mi
+
+secrets:
+  postgresql:
+    useExisting: true
+    secretName: zammad-pg-app
+    secretKey: password
+
+# dependency subcharts - these keys live at TOP LEVEL, not under zammadConfig
+elasticsearch:
+  master:
+    resourcesPreset: none
+    resources:
+      requests:
+        cpu: 100m
+        memory: 900Mi
+      limits:
+        cpu: 400m
+        memory: 1408Mi
+
+memcached:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+    limits:
+      cpu: 50m
+      memory: 64Mi
+
+redis:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+    limits:
+      cpu: 50m
+      memory: 64Mi
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: helpdesk.app.cloudraft.io
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: zammad-tls
+      hosts:
+        - helpdesk.app.cloudraft.io
