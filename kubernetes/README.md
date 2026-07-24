@@ -45,6 +45,23 @@ kubernetes/
 4. From here on, ArgoCD owns sync: edits under `apps/zammad/prod/` or
    `platform/cnpg/` land automatically (`prune: true, selfHeal: true`).
 
+### Tested on minikube (2026-07-24)
+
+Validated against a real ArgoCD instance (not just local rendering) by pushing
+this directory to a throwaway public repo and syncing from there:
+
+- `platform/argocd` installs cleanly; the `kustomize.buildOptions` value lands
+  in `argocd-cm` as expected.
+- `apps/zammad/prod` renders the full, correct resource set (all Deployments/
+  StatefulSets, Ingress, and the `zammad-pg` CNPG `Cluster` CR) — matches what
+  actually runs on the live k3s VM.
+- `platform/cnpg`: the CNPG operator's `clusters.postgresql.cnpg.io` CRD is
+  large enough that client-side `kubectl apply` rejects it (the full manifest
+  duplicated into the `last-applied-configuration` annotation exceeds
+  Kubernetes' 256KiB annotation limit) — a known CNPG+ArgoCD issue. Fixed by
+  adding `syncOptions: [ServerSideApply=true]` to `cnpg.yaml`, which applies
+  without the annotation.
+
 ### Not yet wired up (deferred on purpose)
 
 - **Secrets**: `zammad-values.yaml` references `zammad-pg-app` (the Secret CNPG
