@@ -1,0 +1,16 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: zammad-pg-backup
+  namespace: zammad
+spec:
+  retentionPolicy: "7d"
+  configuration:
+    destinationPath: "s3://cloudraft-cnpg-backup/zammad-pg"
+    s3Credentials:
+      accessKeyId:
+        name: zammad-pg-backup-s3-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: zammad-pg-backup-s3-creds
+        key: ACCESS_SECRET_KEY

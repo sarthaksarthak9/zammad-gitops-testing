@@ -5,6 +5,9 @@ namespace: zammad
 resources:
   - namespace.yaml
   - cnpg-cluster.yaml
+  - cnpg-backup.yaml
+  - secretstore.yaml
+  - externalsecret-pg-backup-s3.yaml
 
 helmCharts:
   - name: zammad

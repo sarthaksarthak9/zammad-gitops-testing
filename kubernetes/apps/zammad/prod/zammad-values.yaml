@@ -9,7 +9,7 @@ zammadConfig:
   railsserver:
     resources:
       requests:
-        cpu: 100m
+        cpu: 50m
         memory: 384Mi
       limits:
         cpu: 300m
@@ -27,7 +27,7 @@ zammadConfig:
   websocket:
     resources:
       requests:
-        cpu: 100m
+        cpu: 50m
         memory: 160Mi
       limits:
         cpu: 500m

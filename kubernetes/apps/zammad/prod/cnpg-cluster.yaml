@@ -4,10 +4,15 @@ metadata:
   name: zammad-pg
   namespace: zammad
 spec:
-  instances: 1
+  instances: 2
   storage:
     size: 3Gi
   bootstrap:
     initdb:
       database: zammad_production
       owner: zammad
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: zammad-pg-backup
